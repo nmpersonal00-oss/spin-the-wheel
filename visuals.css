@@ -98,3 +98,74 @@ html,body{background:#16071f}
 @media(prefers-reduced-motion:reduce){
   #backdrop:before,#backdrop:after,.ambientCloud,.sceneCharm,#desktopBrand,#wheelRing .bulb{animation:none!important}
 }
+/* Readable wheel choice controls. Keep existing panel positions and dreamy styling. */
+#editDesktop{
+  font-size:21px;
+  padding:9px 17px;
+  left:152px;
+  top:515px;
+}
+#editor{
+  left:54px;
+  width:446px;
+  max-height:368px;
+  padding:18px;
+}
+#editorHead h2{font-size:26px}
+#editorHead button{
+  width:39px;
+  height:39px;
+  font-size:25px;
+}
+#entriesList{max-height:211px;gap:8px}
+#entriesList .entry{
+  padding:9px 11px;
+  font-size:23px;
+  line-height:1.3;
+}
+#entriesList .entryText{min-width:0;overflow-wrap:anywhere}
+#entriesList .rm{
+  min-width:37px;
+  min-height:37px;
+  font-size:28px;
+  flex-shrink:0;
+}
+#entriesList .bullet,#mobileEntryList .bullet{
+  width:12px;
+  height:12px;
+  flex-shrink:0;
+}
+#editorFoot button{
+  font-size:16px;
+  padding:10px 11px;
+}
+#mobileEditCard header span{font-size:17px}
+#mobileEntryList{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  max-height:min(38vh,270px);
+  gap:8px;
+  padding-right:4px;
+  overflow-y:auto;
+}
+#mobileEntryList .entry{
+  width:100%;
+  padding:10px 11px;
+  font-size:20px;
+  line-height:1.35;
+}
+#mobileEntryList .entryText{
+  flex:1;
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+#mobileEntryList .rm{
+  min-width:38px;
+  min-height:38px;
+  font-size:27px;
+  flex-shrink:0;
+}
+#mobileButtons .mobile-secondary{
+  font-size:16px;
+  padding:9px 12px;
+}

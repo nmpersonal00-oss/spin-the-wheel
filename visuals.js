@@ -306,6 +306,81 @@
     ['#c887d7', '#9952b4'], ['#e77bba', '#b24b98'], ['#b37dd0', '#81439e'],
     ['#ffacd9', '#cf67b3'], ['#a974cf', '#774198']
   ];
+  // Put readable type inside the available segment instead of shrinking all names.
+  function shortenLabel(ctx, value, maxWidth) {
+    const chars = Array.from(String(value).trim().replace(/\s+/g, ' '));
+    if (ctx.measureText(chars.join('')).width <= maxWidth) return chars.join('');
+    while (chars.length && ctx.measureText(chars.join('') + '…').width > maxWidth) chars.pop();
+    return chars.join('').trimEnd() + '…';
+  }
+  function twoLineLabel(ctx, value, maxWidth) {
+    const text = String(value).trim().replace(/\s+/g, ' ');
+    if (ctx.measureText(text).width <= maxWidth) return [text];
+    const chars = Array.from(text);
+    let best = null, bestScore = Infinity;
+    for (let i = 1; i < chars.length; i++) {
+      const first = chars.slice(0, i).join('').trimEnd();
+      const second = chars.slice(i).join('').trimStart();
+      if (!first || !second) continue;
+      const a = ctx.measureText(first).width, b = ctx.measureText(second).width;
+      if (a > maxWidth || b > maxWidth) continue;
+      const wordBoundary = chars[i - 1] === ' ' || chars[i] === ' ';
+      const score = Math.abs(a - b) - (wordBoundary ? 28 : 0);
+      if (score < bestScore) { bestScore = score; best = [first, second]; }
+    }
+    if (best) return best;
+    // Very long names still use the maximum readable size; the choice list shows them in full.
+    let split = 1;
+    while (split < chars.length && ctx.measureText(chars.slice(0, split + 1).join('')).width <= maxWidth) split++;
+    return [shortenLabel(ctx, chars.slice(0, split).join(''), maxWidth),
+      shortenLabel(ctx, chars.slice(split).join(''), maxWidth)];
+  }
+  function drawReadableLabel(ctx, name, n, angle, distance) {
+    ctx.save();
+    ctx.translate(Math.cos(angle) * distance, Math.sin(angle) * distance);
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.lineJoin = 'round';
+    ctx.fillStyle = '#fffaff';
+    ctx.strokeStyle = '#54164d';
+    ctx.shadowColor = '#4e1351';
+    ctx.shadowBlur = 5;
+
+    if (n <= 8) {
+      const maxWidth = n === 1 ? 252 : Math.min(252, 2 * distance * Math.sin(Math.PI / n) * .85);
+      const original = String(name).replace(/\s/g, '');
+      let fontSize = n <= 5 ? 44 : 40, lines = [];
+      // Use the largest comfortably readable size that fits the whole name in two lines.
+      for (let size = fontSize; size >= 34; size -= 2) {
+        ctx.font = '900 ' + size + 'px "Trebuchet MS",Arial,sans-serif';
+        lines = twoLineLabel(ctx, name, maxWidth);
+        fontSize = size;
+        if (!lines.some(line => line.includes('…')) &&
+            lines.join('').replace(/\s/g, '') === original) break;
+      }
+      ctx.lineWidth = 6;
+      const lineHeight = fontSize * 1.03;
+      const offset = (lines.length - 1) * lineHeight / 2;
+      lines.forEach((line, index) => {
+        const y = index * lineHeight - offset;
+        ctx.strokeText(line, 0, y);
+        ctx.fillText(line, 0, y);
+      });
+    } else {
+      // Crowded wheels use the length of each wedge instead of tiny horizontal type.
+      const fontSize = n <= 13 ? 39 : n <= 24 ? 32 : n <= 40 ? 26 : 20;
+      const maxWidth = 233;
+      const facingLeft = Math.cos(angle) < 0;
+      ctx.rotate(angle + (facingLeft ? Math.PI : 0));
+      ctx.font = '900 ' + fontSize + 'px "Trebuchet MS",Arial,sans-serif';
+      ctx.lineWidth = n > 40 ? 3.2 : 5;
+      const label = shortenLabel(ctx, name, maxWidth);
+      ctx.strokeText(label, 0, 0);
+      ctx.fillText(label, 0, 0);
+    }
+    ctx.restore();
+  }
+
   function drawWheel(canvas, items, custom) {
     const ctx = canvas.getContext('2d');
     const sz = 740, cx = sz / 2, cy = sz / 2, radius = 357, n = items.length;
@@ -332,15 +407,7 @@
         if (!custom && n === 7) {
           icon(ctx, defaultIcons[i], x, y, 72);
         } else {
-          const available = Math.max(20, Math.min(206, Math.PI * 2 * p / n * .95));
-          const fontSize = n <= 8 ? 23 : n <= 14 ? 18 : n <= 24 ? 13 : 10;
-          const name = items[i].length > (n < 10 ? 17 : 10) ? items[i].slice(0, n < 10 ? 16 : 9) + '…' : items[i];
-          ctx.save(); ctx.translate(x, y);
-          ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-          ctx.font = 'italic bold ' + fontSize + 'px Georgia,serif';
-          ctx.lineWidth = 4; ctx.strokeStyle = '#6c2a77'; ctx.strokeText(name, 0, 0, available);
-          ctx.fillStyle = '#fff6fc'; ctx.shadowColor = '#ffdaef'; ctx.shadowBlur = 5;
-          ctx.fillText(name, 0, 0, available); ctx.restore();
+          drawReadableLabel(ctx, items[i], n, angle, p);
         }
         // Small, drawn-in-place glints (not raster sprites).
         if (n < 18) {
