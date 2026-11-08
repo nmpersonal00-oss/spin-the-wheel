@@ -160,9 +160,55 @@
     actx.bezierCurveTo(p.size, p.size * .65, p.size, -p.size * .75, 0, -p.size);
     actx.fill(); actx.restore();
   }
+  // Hand-drawn silk ribbons and sakura clusters frame the moving night sky.
+  function cornerFlorals(t) {
+    const scale = Math.max(.48, Math.min(1.1, w / 1450));
+    actx.save();
+    actx.globalAlpha = .32;
+    actx.lineCap = 'round';
+    for (const right of [false, true]) {
+      actx.save();
+      if (right) { actx.translate(w, 0); actx.scale(-1, 1); }
+      const ribbon = actx.createLinearGradient(0, 0, 235 * scale, 270 * scale);
+      ribbon.addColorStop(0, '#ffdaef'); ribbon.addColorStop(.5, '#f27bc6');
+      ribbon.addColorStop(1, '#6d306f');
+      actx.strokeStyle = ribbon; actx.lineWidth = 9 * scale;
+      actx.beginPath(); actx.moveTo(0, 65 * scale);
+      actx.bezierCurveTo(180 * scale, 35 * scale, 40 * scale, 174 * scale, 215 * scale, 212 * scale);
+      actx.stroke();
+      actx.strokeStyle = '#ffe5f4'; actx.lineWidth = 2 * scale; actx.stroke();
+      actx.restore();
+    }
+    actx.restore();
+    const flowers = [
+      [.016,.022,26], [.061,.046,34], [.115,.009,23], [.035,.118,17],
+      [.984,.029,28], [.938,.064,35], [.884,.014,22], [.963,.130,17],
+      [.018,.962,33], [.080,.993,25], [.137,.957,19],
+      [.984,.964,34], [.923,.996,25], [.858,.963,19]
+    ];
+    for(let i=0;i<flowers.length;i++){
+      const [fx,fy,r]=flowers[i],sway=reducedMotion?0:Math.sin(t*.35+i)*3.0;
+      actx.save(); actx.translate(fx*w+sway,fy*h+sway*.5);
+      actx.rotate((i%5)*.32+(reducedMotion?0:Math.sin(t*.2+i)*.05));
+      actx.globalAlpha=.48;
+      actx.shadowColor='#f977c6';actx.shadowBlur=12;
+      for(let j=0;j<5;j++){
+        actx.save();actx.rotate(j*Math.PI*2/5);
+        const petal=actx.createLinearGradient(0,-r,0,0);
+        petal.addColorStop(0,'#fff1fa');petal.addColorStop(1,'#e77bbd');
+        actx.fillStyle=petal;actx.strokeStyle='#ffdef2';actx.lineWidth=1;
+        actx.beginPath();actx.ellipse(0,-r*.6,r*.42,r*.66,0,0,Math.PI*2);
+        actx.fill();actx.stroke();actx.restore();
+      }
+      actx.shadowBlur=0;actx.fillStyle='#ffe0a1';
+      actx.beginPath();actx.arc(0,0,r*.16,0,Math.PI*2);actx.fill();
+      actx.restore();
+    }
+  }
   function paint(time) {
     const t = time / 1000;
     actx.clearRect(0, 0, w, h);
+    cornerFlorals(t);
     for (const s of stars) {
       const glow = .28 + .58 * (1 + Math.sin(t * s.speed + s.phase)) / 2;
       actx.globalAlpha = glow;
