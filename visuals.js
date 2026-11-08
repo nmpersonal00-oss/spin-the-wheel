@@ -347,10 +347,17 @@
     ctx.shadowBlur = 5;
 
     if (n <= 8) {
-      const fontSize = n <= 5 ? 44 : 40;
       const maxWidth = n === 1 ? 252 : Math.min(252, 2 * distance * Math.sin(Math.PI / n) * .85);
-      ctx.font = '900 ' + fontSize + 'px "Trebuchet MS",Arial,sans-serif';
-      const lines = twoLineLabel(ctx, name, maxWidth);
+      const original = String(name).replace(/\\s/g, '');
+      let fontSize = n <= 5 ? 44 : 40, lines = [];
+      // Use the largest comfortably readable size that fits the whole name in two lines.
+      for (let size = fontSize; size >= 34; size -= 2) {
+        ctx.font = '900 ' + size + 'px "Trebuchet MS",Arial,sans-serif';
+        lines = twoLineLabel(ctx, name, maxWidth);
+        fontSize = size;
+        if (!lines.some(line => line.includes('…')) &&
+            lines.join('').replace(/\\s/g, '') === original) break;
+      }
       ctx.lineWidth = 6;
       const lineHeight = fontSize * 1.03;
       const offset = (lines.length - 1) * lineHeight / 2;
