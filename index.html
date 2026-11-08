@@ -115,7 +115,7 @@ function bell(pitch,offset=.0,duration=.17,loudness=.23){
       gain.gain.setValueAtTime(.0001,t);
       gain.gain.exponentialRampToValueAtTime(amplitude,t+.006);
       gain.gain.exponentialRampToValueAtTime(.0001,t+duration);
-      oscillator.connect(gain).connect(synthBus);
+      oscillator.connect(gain);gain.connect(synthBus);
       oscillator.start(t);oscillator.stop(t+duration+.012);
     }
   }catch(e){}
