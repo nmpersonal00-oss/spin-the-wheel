@@ -25,10 +25,33 @@ footer{margin-top:auto;text-align:center;color:#eab3d1;font-size:10px;letter-spa
 @media(max-width:900px){.topbar{min-height:128px}.tools{right:0;top:8px}.topbar .title{font-size:70px}.workspace{display:flex;flex-direction:column;gap:22px;padding:9px 0 30px}.wheel-section{width:100%;order:1}.wheel-wrap{width:min(90vw,600px);max-width:600px}.action-panel{order:2;gap:10px;width:min(90%,380px)}.spin-button{padding:17px;font-size:43px}.ornament{display:none}.action-help{display:none}.entry-panel{width:min(100%,580px);order:3;max-height:none;min-height:unset}.item-list{max-height:270px}.app{padding-bottom:30px}.brand-rule{margin-top:-12px}.action-status{font-size:16px}}
 @media(max-width:520px){.app{padding:5px 13px 18px}.topbar{padding-top:72px;min-height:153px}.topbar .title{font-size:clamp(51px,12vw,67px)}.eyebrow{font-size:9px}.tools{top:8px;right:0;gap:5px}.sound-control{padding:5px 8px;gap:5px}.sound-control input{width:57px}.tiny-label{display:none}.wheel-wrap{width:min(94vw,480px)}.wheel-section{margin-top:3px}.entry-panel{padding:21px 16px 17px}.workspace{gap:18px}.item-list{max-height:210px}.brand-rule{margin-top:-12px}.spin-button{font-size:41px;padding:15px}.action-count{font-size:10px}.action-status{min-height:20px}.panel-title{font-size:26px}}
 @media(prefers-reduced-motion:reduce){#garden,#aurora,.wheel-wrap::before,.winner-box{animation:none!important}*{scroll-behavior:auto!important}}
+
+/* Accessibility: legible choices on the active page, on phones and desktops. */
+.entry-name{font-size:clamp(18px,1.45vw,22px);font-weight:700;line-height:1.42;color:#fff7fd}
+.entry-row{min-height:55px;padding:9px 8px 9px 12px;gap:11px}
+.entry-mark{width:12px;height:12px;flex-basis:12px}
+.remove{width:39px;height:39px;flex:0 0 39px}
+.remove svg{width:20px;height:20px}
+.subhead{font-size:15px}
+.item-form input{font-size:17px}
+.panel-count{font-size:15px;line-height:1.4}
+.empty{font-size:17px}
+@media(max-width:900px){
+  .entry-name{font-size:21px}
+  .entry-row{min-height:57px}
+  .item-list{max-height:min(43svh,380px)}
+}
+@media(max-width:520px){
+  .entry-name{font-size:21px}
+  .entry-row{min-height:58px}
+  .item-list{max-height:330px}
+  .panel-count{font-size:15px}
+  .subhead{font-size:15px}
+}
 </style></head><body>
 <div id="garden" aria-hidden="true"></div><div id="aurora" aria-hidden="true"></div><canvas id="ambient" aria-hidden="true"></canvas><div id="veil" aria-hidden="true"></div>
 <main class="app">
- <header class="topbar"><div class="branding"><p class="eyebrow">a little moment of magic</p><h1 class="title">Spin the Wheel</h1><div class="brand-rule" aria-hidden="true"><svg viewBox="0 0 40 25"><path d="M20 22 C-7 10 8 -8 20 6 C32 -8 47 10 20 22Z"/></svg></div></div><div class="tools"><div class="sound-control"><span class="tiny-label">Volume</span><button type="button" id="soundBtn" class="icon-btn" aria-label="Mute applause"></button><input id="volume" type="range" min="0" max="100" step="1" value="22" aria-label="Applause volume"></div></div></header>
+ <header class="topbar"><div class="branding"><p class="eyebrow">a little moment of magic</p><h1 class="title">Spin the Wheel</h1><div class="brand-rule" aria-hidden="true"><svg viewBox="0 0 40 25"><path d="M20 22 C-7 10 8 -8 20 6 C32 -8 47 10 20 22Z"/></svg></div></div><div class="tools"><div class="sound-control"><span class="tiny-label">Volume</span><button type="button" id="soundBtn" class="icon-btn" aria-label="Mute sound"></button><input id="volume" type="range" min="0" max="100" step="1" value="22" aria-label="Sound effects and applause volume"></div></div></header>
  <div class="workspace">
  <section class="entry-panel panel" aria-label="Wheel choices"><svg class="panel-flower" viewBox="0 0 50 50" aria-hidden="true"><g fill="#ffa9d9"><ellipse cx="25" cy="13" rx="9" ry="13"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(72 25 25)"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(144 25 25)"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(216 25 25)"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(288 25 25)"/></g><circle cx="25" cy="25" r="6" fill="#ffe8ad"/></svg><h2 class="panel-title">Add Your Items</h2><p class="subhead">Names, treats, ideas… anything you like.</p><form class="item-form" id="itemForm" autocomplete="off"><label class="sr-only" for="itemInput">Enter a name or item</label><input id="itemInput" placeholder="Type an item…" maxlength="800" enterkeyhint="done"><button class="add-btn" aria-label="Add choice" type="submit">+</button></form><div id="itemList" class="item-list" aria-live="polite"></div><div class="row-actions"><button class="subtle-btn" type="button" id="shuffle">Shuffle</button><button class="subtle-btn" type="button" id="defaults">Cute defaults</button><button class="subtle-btn" type="button" id="clear">Clear all</button></div><p class="panel-count" id="countText">7 choices on your wheel</p></section>
  <section class="wheel-section" aria-label="Spinning wheel"><div class="wheel-wrap"><div class="wheel-frame"></div><div class="wheel-rotor" id="rotor"><canvas id="wheelCanvas" width="900" height="900" role="img" aria-label="Wheel displaying your choices"></canvas></div><div id="lights" class="lights" aria-hidden="true"></div><div class="hub" aria-hidden="true"><svg viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bowGrad" x1="0" x2=".7" y2="1"><stop stop-color="#ffe5f3"/><stop offset=".42" stop-color="#ff91c9"/><stop offset="1" stop-color="#b53686"/></linearGradient><radialGradient id="gem"><stop stop-color="#fff3fd"/><stop offset=".5" stop-color="#ff92d4"/><stop offset="1" stop-color="#b21f84"/></radialGradient></defs><path d="M75 74 Q38 51 13 41 Q5 72 29 88 Q8 97 16 119 Q49 126 83 90 Q68 114 61 145 Q81 146 97 119 Q109 143 128 148 Q131 113 111 86 Q139 116 165 108 Q175 85 149 78 Q167 61 158 39 Q124 43 105 75Z" fill="url(#bowGrad)" stroke="#ffe3f5" stroke-width="3"/><path d="M72 71 Q41 54 19 46 M108 72 Q137 52 155 45 M78 90 Q56 108 25 113 M102 92 Q123 114 155 106" fill="none" stroke="#fff2f9" stroke-opacity=".75" stroke-width="3"/><path d="M90 74 C64 51 47 84 90 107 C132 84 114 51 90 74Z" fill="url(#gem)" stroke="#ffe5fb" stroke-width="4"/><path d="M75 75 Q85 66 91 75" stroke="#fff" stroke-opacity=".8" stroke-width="3" fill="none"/></svg></div><div class="pointer" aria-hidden="true"><svg viewBox="0 0 98 118"><defs><linearGradient id="pointPink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff5fc"/><stop offset=".45" stop-color="#ff8fce"/><stop offset="1" stop-color="#c0328a"/></linearGradient></defs><path d="M49 22 C19 -1 0 29 14 51 C24 67 42 80 49 112 C56 80 74 67 84 51 C98 29 79 -1 49 22Z" fill="url(#pointPink)" stroke="#ffe7f9" stroke-width="5"/><path d="M49 33 C32 19 16 32 24 48" stroke="#fff1fc" stroke-width="5" fill="none" stroke-linecap="round"/></svg></div></div></section>
@@ -53,11 +76,98 @@ function save(){try{localStorage.setItem('sakura-spin-v3',JSON.stringify({items,
 function message(s){const n=$('toast');n.textContent=s;n.classList.add('show');clearTimeout(toastTime);toastTime=setTimeout(()=>n.classList.remove('show'),2300)}
 function rng(n){if(!n)return 0;if(crypto&&crypto.getRandomValues){const a=new Uint32Array(1),max=4294967296,limit=max-max%n;do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%n;}return Math.floor(Math.random()*n)}
 function renderList(){const list=$('itemList');list.replaceChildren();if(!items.length){const empty=document.createElement('p');empty.className='empty';empty.textContent='Your wheel is empty. Add a few choices to start.';list.append(empty)}items.forEach((name,i)=>{const row=document.createElement('div');row.className='entry-row';const dot=document.createElement('i');dot.className='entry-mark';dot.style.setProperty('--dot',colors[i%colors.length]);const title=document.createElement('span');title.className='entry-name';title.textContent=name;const rm=document.createElement('button');rm.type='button';rm.className='remove';rm.innerHTML=tinyTrash;rm.title='Remove '+name;rm.setAttribute('aria-label','Remove '+name);rm.disabled=spinning;rm.addEventListener('click',()=>{if(spinning)return;items.splice(i,1);update()});row.append(dot,title,rm);list.append(row)});$('countText').textContent=items.length+' choice'+(items.length===1?'':'s')+' on your wheel';$('ready').textContent=items.length+' CHOICE'+(items.length===1?'':'S')+' READY';$('spin').disabled=spinning||!items.length;$('actionStatus').textContent=spinning?'Spinning…':items.length?'Tap spin to choose':'Add an item to begin';}
-function pushItems(value){const pieces=value.split(/[\n,;]+/).map(s=>s.replace(/\s+/g,' ').trim()).filter(Boolean).map(s=>s.slice(0,55));if(!pieces.length){message('Type something to add first.');return}let possible=80-items.length;if(possible<=0){message('The wheel holds up to 80 choices.');return}items.push(...pieces.slice(0,possible));update();$('itemInput').value='';message(pieces.length===1?'Choice added.':Math.min(possible,pieces.length)+' choices added.');}
+function pushItems(value){const pieces=value.split(/[\n,;]+/).map(s=>s.replace(/\s+/g,' ').trim()).filter(Boolean).map(s=>s.slice(0,55));if(!pieces.length){message('Type something to add first.');return}let possible=80-items.length;if(possible<=0){message('The wheel holds up to 80 choices.');return}items.push(...pieces.slice(0,possible));update();kawaiiSound('add');$('itemInput').value='';message(pieces.length===1?'Choice added.':Math.min(possible,pieces.length)+' choices added.');}
 $('itemForm').addEventListener('submit',e=>{e.preventDefault();pushItems($('itemInput').value)});
 $('clear').addEventListener('click',()=>{if(spinning)return;items=[];update();message('Wheel cleared.')});$('defaults').addEventListener('click',()=>{if(spinning)return;items=[...defaultItems];update();message('Cute choices restored.')});$('shuffle').addEventListener('click',()=>{if(spinning)return;for(let i=items.length-1;i>0;i--){let j=rng(i+1);[items[i],items[j]]=[items[j],items[i]]}update();message('Choices shuffled.')});
-function updateSound(){if(volume===0)muted=true;$('soundBtn').innerHTML=muted?soundOff:soundOn;$('soundBtn').title=muted?'Enable quiet applause':'Mute applause';$('soundBtn').setAttribute('aria-label',muted?'Enable applause':'Mute applause');$('volume').value=volume;save();}
-$('soundBtn').addEventListener('click',()=>{muted=!muted;if(!muted&&volume===0)volume=22;if(muted)stopAudio();updateSound();message(muted?'Sound muted':'Gentle applause on')});$('volume').addEventListener('input',e=>{volume=Number(e.target.value);muted=(volume===0);if(muted)stopAudio();updateSound()});
+// Tiny offline bell and marimba-like sounds, unlocked by real user gestures.
+let synthContext=null,synthBus=null,lastPreview=0;
+function unlockSounds(){
+  if(muted||volume<=0)return null;
+  try{
+    if(!synthContext){
+      const AudioConstructor=window.AudioContext||window.webkitAudioContext;
+      if(!AudioConstructor)return null;
+      synthContext=new AudioConstructor();
+      synthBus=synthContext.createGain();
+      synthBus.connect(synthContext.destination);
+    }
+    const t=synthContext.currentTime;
+    synthBus.gain.setTargetAtTime(Math.min(.5,volume/100*.72),t,.02);
+    if(synthContext.state==='suspended')synthContext.resume().catch(()=>{});
+    return synthContext;
+  }catch(e){return null}
+}
+function muteSounds(){
+  if(synthBus&&synthContext){
+    try{synthBus.gain.setTargetAtTime(0,synthContext.currentTime,.012)}catch(e){}
+  }
+}
+function bell(pitch,offset=.0,duration=.17,loudness=.23){
+  const ac=unlockSounds();if(!ac)return;
+  try{
+    const t=ac.currentTime+offset;
+    // Two short harmonics make a light, musical chime rather than an aggressive beep.
+    for(const harmonic of [1,2.01]){
+      const oscillator=ac.createOscillator(),gain=ac.createGain();
+      oscillator.type='sine';
+      oscillator.frequency.setValueAtTime(pitch*harmonic,t);
+      const amplitude=loudness*(harmonic===1?1:.19);
+      gain.gain.setValueAtTime(.0001,t);
+      gain.gain.exponentialRampToValueAtTime(amplitude,t+.006);
+      gain.gain.exponentialRampToValueAtTime(.0001,t+duration);
+      oscillator.connect(gain);gain.connect(synthBus);
+      oscillator.start(t);oscillator.stop(t+duration+.012);
+    }
+  }catch(e){}
+}
+function kawaiiSound(type='tap'){
+  if(muted||volume<=0)return;
+  switch(type){
+    case 'spin':
+      [[784,0],[988,.095],[1175,.19],[1568,.285]].forEach(([f,t])=>bell(f,t,.29,.24));break;
+    case 'tick': bell(740,0,.052,.13);break;
+    case 'win':
+      [[880,0],[1109,.115],[1319,.23],[1760,.36]].forEach(([f,t])=>bell(f,t,.44,.21));break;
+    case 'add': bell(784,0,.16,.25);bell(1175,.09,.26,.23);break;
+    case 'remove': bell(880,0,.13,.18);bell(659,.09,.19,.17);break;
+    case 'shuffle': [[880,0],[1175,.07],[988,.14]].forEach(([f,t])=>bell(f,t,.17,.19));break;
+    case 'clear': bell(659,0,.15,.18);bell(523,.08,.23,.17);break;
+    case 'reset': bell(740,0,.15,.18);bell(988,.1,.20,.22);break;
+    case 'on': bell(880,0,.13,.22);bell(1319,.085,.29,.19);break;
+    default: bell(988,0,.11,.19);bell(1319,.045,.15,.12);
+  }
+}
+function updateSound(){
+  if(volume===0)muted=true;
+  $('soundBtn').innerHTML=muted?soundOff:soundOn;
+  $('soundBtn').title=muted?'Enable kawaii sounds':'Mute sounds';
+  $('soundBtn').setAttribute('aria-label',muted?'Enable kawaii sounds':'Mute sounds');
+  $('volume').value=volume;save();
+}
+$('soundBtn').addEventListener('click',()=>{
+  muted=!muted;
+  if(!muted&&volume===0)volume=32;
+  if(muted){stopAudio();muteSounds()}
+  updateSound();
+  if(!muted)kawaiiSound('on');
+  message(muted?'Sounds muted':'Kawaii sounds on');
+});
+$('volume').addEventListener('input',e=>{
+  volume=Number(e.target.value);muted=(volume===0);
+  if(muted){stopAudio();muteSounds()}
+  updateSound();
+  if(!muted&&performance.now()-lastPreview>250){
+    lastPreview=performance.now();kawaiiSound('tap');
+  }
+});
+$('itemInput').addEventListener('focus',()=>kawaiiSound('tap'));
+document.addEventListener('click',e=>{
+  const button=e.target.closest('button');
+  if(!button||button.disabled||['soundBtn','spin','again'].includes(button.id)||button.classList.contains('add-btn'))return;
+  const kind=button.classList.contains('remove')?'remove':button.id==='shuffle'?'shuffle':
+    button.id==='clear'?'clear':button.id==='defaults'?'reset':'tap';
+  kawaiiSound(kind);
+});
 // The wheel and its icons are vector shapes painted fresh for the current choices. No screenshot layers.
 const wheel=$('wheelCanvas'),ctx=wheel.getContext('2d');const CX=450,CY=450,R=438;
 function ellipse(x,y,rx,ry,rot,fill,stroke){ctx.beginPath();ctx.ellipse(x,y,rx,ry,rot,0,Math.PI*2);if(fill){ctx.fillStyle=fill;ctx.fill()}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}}
@@ -73,9 +183,75 @@ function sparkle(x,y,s){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillSty
 function iconFor(name,index,x,y,s){const str=name.toLowerCase();ctx.save();ctx.shadowColor='#421346';ctx.shadowBlur=9;ctx.lineWidth=3;ctx.strokeStyle='#fff0f8';ctx.fillStyle='#ffb5db';if(/bow|ribbon/.test(str))bow(x,y,s);else if(/flower|blossom|sakura|rose/.test(str))blossom(x,y,s*.85);else if(/cake|cupcake|sweet/.test(str))cake(x,y,s);else if(/strawberry|berry|cherr/.test(str))strawberry(x,y,s);else if(/butterfly|flutter/.test(str))butterfly(x,y,s);else if(/moon|night/.test(str))moon(x,y,s);else if(/heart|love/.test(str))heart(x,y,s*.8);else star(x,y,s*38);ctx.restore()}
 function drawWheel(){const n=items.length;ctx.clearRect(0,0,900,900);if(!n){const g=ctx.createRadialGradient(450,400,10,450,450,450);g.addColorStop(0,'#d98fce');g.addColorStop(1,'#73356e');ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff3fc';ctx.font='italic 34px Georgia';ctx.textAlign='center';ctx.fillText('Add your choices',450,454);return}const step=Math.PI*2/n;for(let i=0;i<n;i++){const angle=-Math.PI/2+(i-.5)*step,next=angle+step;const g=ctx.createRadialGradient(CX-90,CY-115,10,CX,CY,540);const light=i%2===0;g.addColorStop(0,light?'#ffd2e6':'#dfb4ed');g.addColorStop(.3,light?'#f69cc8':'#c58fd9');g.addColorStop(.71,light?colors[i%colors.length]:'#a565c1');g.addColorStop(1,light?'#a84283':'#6c397f');ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R,angle,next);ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='rgba(255,232,251,.88)';ctx.lineWidth=n>22?1.5:3;ctx.stroke();const amid=angle+step/2;ctx.save();ctx.translate(CX+Math.cos(amid)*290,CY+Math.sin(amid)*290);ctx.rotate(amid+Math.PI/2);ctx.fillStyle='rgba(255,244,251,.09)';ctx.beginPath();ctx.ellipse(0,0,90,115,.4,0,Math.PI*2);ctx.fill();ctx.restore();}
 const sheen=ctx.createRadialGradient(280,245,60,CX,CY,R);sheen.addColorStop(0,'rgba(255,255,255,.25)');sheen.addColorStop(.45,'rgba(255,255,255,.07)');sheen.addColorStop(1,'rgba(43,3,54,.22)');ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fillStyle=sheen;ctx.fill();ctx.strokeStyle='#ffe9f7bb';ctx.lineWidth=7;ctx.stroke();ctx.beginPath();ctx.arc(CX,CY,R-12,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=2;ctx.stroke();
-// Decorations and labels are part of the wheel canvas, so they cannot look like screenshot patches.
-for(let i=0;i<n;i++){const a=-Math.PI/2+i*step;if(n<=13){const iconR=n<=8?238:250,iconS=n<=8?1.0:.65;iconFor(items[i],i,CX+Math.cos(a)*iconR,CY+Math.sin(a)*iconR,iconS);}
-let name=items[i];const max=n<=8?16:n<=14?12:n<=24?10:n<=42?8:6;if(name.length>max)name=name.slice(0,max-1)+'…';const rr=n<=8?340:n<=14?337:n<=26?342:350;ctx.save();ctx.translate(CX+Math.cos(a)*rr,CY+Math.sin(a)*rr);let angle=a+Math.PI/2;if(n>12){if(Math.cos(angle)<0)angle+=Math.PI;ctx.rotate(angle)}ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`${n<=8?600:500} ${n<=8?20:n<=14?18:n<=25?14:11}px 'DM Sans', sans-serif`;ctx.lineWidth=3.5;ctx.strokeStyle='rgba(57,17,69,.65)';ctx.strokeText(name,0,0,Math.max(40,n<=8?142:180));ctx.fillStyle='#fff8fc';ctx.fillText(name,0,0,Math.max(40,n<=8?142:180));ctx.restore();}
+// Draw names at large, readable sizes, oriented within the actual wheel segments.
+function wheelLabelParts(value,maxWidth){
+  const text=String(value).replace(/\s+/g,' ').trim(),chars=Array.from(text);
+  if(ctx.measureText(text).width<=maxWidth)return [text];
+  let best=null,score=Infinity;
+  for(let i=1;i<chars.length;i++){
+    const first=chars.slice(0,i).join('').trimEnd(),second=chars.slice(i).join('').trimStart();
+    if(!first||!second||ctx.measureText(first).width>maxWidth||ctx.measureText(second).width>maxWidth)continue;
+    const wordBreak=chars[i]===' '||chars[i-1]===' ';
+    const diff=Math.abs(ctx.measureText(first).width-ctx.measureText(second).width)-(wordBreak?50:0);
+    if(diff<score){score=diff;best=[first,second];}
+  }
+  if(best)return best;
+  function fit(text){const arr=Array.from(text);while(arr.length&&ctx.measureText(arr.join('')+'…').width>maxWidth)arr.pop();return arr.join('').trimEnd()+'…';}
+  let split=0;
+  while(split<chars.length&&ctx.measureText(chars.slice(0,split+1).join('')).width<=maxWidth)split++;
+  return [chars.slice(0,split).join('').trimEnd(),fit(chars.slice(split).join('').trimStart())];
+}
+function wheelSingleLine(value,maxWidth){
+  const text=String(value).trim();
+  if(ctx.measureText(text).width<=maxWidth)return text;
+  const letters=Array.from(text);
+  while(letters.length&&ctx.measureText(letters.join('')+'…').width>maxWidth)letters.pop();
+  return letters.join('').trimEnd()+'…';
+}
+function drawWheelName(value,a,n){
+  const r=n<=10?340:n<=25?314:302;
+  ctx.save();
+  ctx.translate(CX+Math.cos(a)*r,CY+Math.sin(a)*r);
+  const wrap=n<=10;
+  let orientation=wrap?a+Math.PI/2:a;
+  if(Math.cos(orientation)<0)orientation+=Math.PI;
+  ctx.rotate(orientation);
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='#fffafe';ctx.strokeStyle='#4b175d';ctx.lineJoin='round';
+  ctx.shadowColor='#2b0d3b';ctx.shadowBlur=5;
+  const font='900 ';
+  if(wrap){
+    const base=n<=5?76:n<=8?70:60,min=n<=8?52:46;
+    const maxWidth=n===1?300:Math.min(298,2*r*Math.sin(Math.PI/n)*.84);
+    let lines=[];
+    for(let size=base;size>=min;size-=2){
+      ctx.font=font+size+"px 'DM Sans','Trebuchet MS',sans-serif";
+      lines=wheelLabelParts(value,maxWidth);
+      if(!lines.some(line=>line.includes('…')))break;
+    }
+    const size=parseInt(ctx.font.match(/(\d+)px/)[1],10);
+    const height=size*1.04;
+    ctx.lineWidth=7;
+    lines.forEach((line,index)=>{const y=(index-(lines.length-1)/2)*height;
+      ctx.strokeText(line,0,y);ctx.fillText(line,0,y);});
+  }else{
+    const size=n<=18?53:n<=30?44:n<=48?35:25;
+    ctx.font=font+size+"px 'DM Sans','Trebuchet MS',sans-serif";
+    ctx.lineWidth=n>48?3.3:5;
+    const line=wheelSingleLine(value,Math.min(252,n<=18?260:226));
+    ctx.strokeText(line,0,0);ctx.fillText(line,0,0);
+  }
+  ctx.restore();
+}
+// Names are rendered directly into the wheel canvas (never a screenshot or a stretched label).
+for(let i=0;i<n;i++){
+  const a=-Math.PI/2+i*step;
+  if(n<=13){
+    const iconR=n<=8?199:210,iconS=n<=8?.8:.57;
+    iconFor(items[i],i,CX+Math.cos(a)*iconR,CY+Math.sin(a)*iconR,iconS);
+  }
+  drawWheelName(items[i],a,n);
+}
 }
 function lights(){const e=$('lights');e.replaceChildren();for(let i=0;i<44;i++){const b=document.createElement('span');b.className='bulb';const angle=i/44*Math.PI*2;b.style.left=(50+47.2*Math.sin(angle))+'%';b.style.top=(50-47.2*Math.cos(angle))+'%';b.style.opacity=String(.53+(i%5)*.1);e.append(b)}}
 function update(){save();drawWheel();renderList();}
@@ -89,13 +265,23 @@ function ambient(t){a.clearRect(0,0,AW,AH);for(let i=0;i<particles.length;i++){c
 function stopAudio(){cancelAnimationFrame(audioFade);clearTimeout(applauseStop);audio.pause();try{audio.currentTime=0}catch(e){}audio.volume=0}
 function softApplause(){stopAudio();if(muted||volume===0)return;const target=Math.min(.24,volume/100*.35);audio.volume=0;audio.play().then(()=>{const start=performance.now(),length=4800;function mix(t){const elapsed=t-start,fadeIn=Math.min(1,elapsed/700),fadeOut=Math.min(1,Math.max(0,length-elapsed)/1150);audio.volume=Math.min(1,target*fadeIn*fadeOut);if(elapsed<length&&!audio.paused)audioFade=requestAnimationFrame(mix);else stopAudio()}audioFade=requestAnimationFrame(mix)}).catch(()=>{/* if remote audio is unavailable, celebrate visually without harsh generated noise */})}
 function setRotation(v){rotation=v;$('rotor').style.transform=`rotate(${v}deg)`}
-function spin(){if(spinning||!items.length)return;closeWinner();spinning=true;renderList();$('spin').disabled=true;const n=items.length,winner=rng(n),step=360/n;const current=((rotation%360)+360)%360,needed=(360-(winner*step)%360)%360,delta=(needed-current+360)%360;const final=rotation+360*(5+rng(3))+delta;const initial=rotation,start=performance.now(),duration=preferLess?600:5800+Math.random()*1000;
-function animate(now){const t=Math.min(1,(now-start)/duration);const ease=1-Math.pow(1-t,4.8);setRotation(initial+(final-initial)*ease);if(t<1){animation=requestAnimationFrame(animate)}else{rotation=final%360;setRotation(rotation);spinning=false;renderList();$('spin').disabled=false;showWinner(items[winner]);}}animation=requestAnimationFrame(animate)}
+function spin(){if(spinning||!items.length)return;closeWinner();kawaiiSound('spin');spinning=true;renderList();$('spin').disabled=true;const n=items.length,winner=rng(n),step=360/n;const current=((rotation%360)+360)%360,needed=(360-(winner*step)%360)%360,delta=(needed-current+360)%360;const final=rotation+360*(5+rng(3))+delta;const initial=rotation,start=performance.now(),duration=preferLess?600:5800+Math.random()*1000;
+let previousWedge=-1,lastTickTime=0;
+function animate(now){
+  const t=Math.min(1,(now-start)/duration),ease=1-Math.pow(1-t,4.8);
+  const currentRotation=initial+(final-initial)*ease;
+  setRotation(currentRotation);
+  const wedge=Math.floor((((currentRotation%360)+360)%360)/step);
+  if(t>.04&&t<.95&&wedge!==previousWedge&&now-lastTickTime>90){
+    lastTickTime=now;kawaiiSound('tick');
+  }
+  previousWedge=wedge;
+  if(t<1){animation=requestAnimationFrame(animate)}else{rotation=final%360;setRotation(rotation);spinning=false;renderList();$('spin').disabled=false;showWinner(items[winner]);}}animation=requestAnimationFrame(animate)}
 $('spin').addEventListener('click',spin);
 const result=$('result'),conf=$('celebration'),cc=conf.getContext('2d');let falling=[];
 resize();addEventListener('resize',resize,{passive:true});ambientFrame=requestAnimationFrame(ambient);
 function celebrateCanvasSize(){conf.width=Math.floor(innerWidth*DPR);conf.height=Math.floor(innerHeight*DPR);conf.style.width=innerWidth+'px';conf.style.height=innerHeight+'px';cc.setTransform(DPR,0,0,DPR,0,0)}
-function showWinner(name){lastFocused=document.activeElement;$('winnerName').textContent=name;result.classList.add('show');result.setAttribute('aria-hidden','false');$('done').focus();softApplause();celebrateCanvasSize();const count=preferLess?40:115;falling=Array.from({length:count},(_,i)=>({x:Math.random()*innerWidth,y:-Math.random()*innerHeight*.65,size:3+Math.random()*9,dx:(Math.random()-.5)*1.9,dy:.9+Math.random()*3.1,r:Math.random()*6.28,spin:(Math.random()-.5)*.06,kind:i%4,color:['#ffd8ef','#fb98c9','#d8a5f5','#ffe4cf'][i%4]}));let start=performance.now();function draw(t){const elapsed=(t-start)/1000;cc.clearRect(0,0,innerWidth,innerHeight);for(const p of falling){p.x+=p.dx+Math.sin(t/700+p.r)*.3;p.y+=p.dy;p.r+=p.spin;if(p.y>innerHeight+20){p.y=-30;p.x=Math.random()*innerWidth}cc.save();cc.translate(p.x,p.y);cc.rotate(p.r);cc.globalAlpha=Math.max(0,Math.min(1,(6-elapsed)*.9));cc.fillStyle=p.color;cc.strokeStyle='#fff1f9aa';cc.lineWidth=.6;if(p.kind===0){for(let j=0;j<5;j++){cc.save();cc.rotate(j*2*Math.PI/5);cc.beginPath();cc.ellipse(0,-p.size*.65,p.size*.45,p.size*.68,0,0,2*Math.PI);cc.fill();cc.restore()}}else if(p.kind===1){cc.beginPath();cc.moveTo(0,p.size*.8);cc.bezierCurveTo(-p.size*1.4,-p.size*.35,-p.size*.8,-p.size*1.2,0,-p.size*.5);cc.bezierCurveTo(p.size*.8,-p.size*1.2,p.size*1.4,-p.size*.35,0,p.size*.8);cc.fill()}else{petalPath(cc,p);cc.fill()}cc.restore()}if(elapsed<5.8&&result.classList.contains('show'))celebrateFrame=requestAnimationFrame(draw);else cc.clearRect(0,0,innerWidth,innerHeight)}cancelAnimationFrame(celebrateFrame);celebrateFrame=requestAnimationFrame(draw)}
+function showWinner(name){kawaiiSound('win');lastFocused=document.activeElement;$('winnerName').textContent=name;result.classList.add('show');result.setAttribute('aria-hidden','false');$('done').focus();softApplause();celebrateCanvasSize();const count=preferLess?40:115;falling=Array.from({length:count},(_,i)=>({x:Math.random()*innerWidth,y:-Math.random()*innerHeight*.65,size:3+Math.random()*9,dx:(Math.random()-.5)*1.9,dy:.9+Math.random()*3.1,r:Math.random()*6.28,spin:(Math.random()-.5)*.06,kind:i%4,color:['#ffd8ef','#fb98c9','#d8a5f5','#ffe4cf'][i%4]}));let start=performance.now();function draw(t){const elapsed=(t-start)/1000;cc.clearRect(0,0,innerWidth,innerHeight);for(const p of falling){p.x+=p.dx+Math.sin(t/700+p.r)*.3;p.y+=p.dy;p.r+=p.spin;if(p.y>innerHeight+20){p.y=-30;p.x=Math.random()*innerWidth}cc.save();cc.translate(p.x,p.y);cc.rotate(p.r);cc.globalAlpha=Math.max(0,Math.min(1,(6-elapsed)*.9));cc.fillStyle=p.color;cc.strokeStyle='#fff1f9aa';cc.lineWidth=.6;if(p.kind===0){for(let j=0;j<5;j++){cc.save();cc.rotate(j*2*Math.PI/5);cc.beginPath();cc.ellipse(0,-p.size*.65,p.size*.45,p.size*.68,0,0,2*Math.PI);cc.fill();cc.restore()}}else if(p.kind===1){cc.beginPath();cc.moveTo(0,p.size*.8);cc.bezierCurveTo(-p.size*1.4,-p.size*.35,-p.size*.8,-p.size*1.2,0,-p.size*.5);cc.bezierCurveTo(p.size*.8,-p.size*1.2,p.size*1.4,-p.size*.35,0,p.size*.8);cc.fill()}else{petalPath(cc,p);cc.fill()}cc.restore()}if(elapsed<5.8&&result.classList.contains('show'))celebrateFrame=requestAnimationFrame(draw);else cc.clearRect(0,0,innerWidth,innerHeight)}cancelAnimationFrame(celebrateFrame);celebrateFrame=requestAnimationFrame(draw)}
 function closeWinner(){result.classList.remove('show');result.setAttribute('aria-hidden','true');cancelAnimationFrame(celebrateFrame);cc.clearRect(0,0,conf.width,conf.height);stopAudio();if(lastFocused){lastFocused.focus();lastFocused=null}}
 $('done').addEventListener('click',closeWinner);$('closeWinner').addEventListener('click',closeWinner);$('again').addEventListener('click',()=>{closeWinner();spin()});result.addEventListener('click',e=>{if(e.target===result)closeWinner()});addEventListener('keydown',e=>{if(e.key==='Escape'&&result.classList.contains('show'))closeWinner();if(e.key==='Tab'&&result.classList.contains('show')){const controls=[$('closeWinner'),$('again'),$('done')];const i=controls.indexOf(document.activeElement);if(e.shiftKey&&i===0){controls[2].focus();e.preventDefault()}else if(!e.shiftKey&&i===2){controls[0].focus();e.preventDefault()}}});
 lights();updateSound();drawWheel();renderList();
