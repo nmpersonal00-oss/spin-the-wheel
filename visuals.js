@@ -348,7 +348,7 @@
 
     if (n <= 8) {
       const maxWidth = n === 1 ? 252 : Math.min(252, 2 * distance * Math.sin(Math.PI / n) * .85);
-      const original = String(name).replace(/\\s/g, '');
+      const original = String(name).replace(/\s/g, '');
       let fontSize = n <= 5 ? 44 : 40, lines = [];
       // Use the largest comfortably readable size that fits the whole name in two lines.
       for (let size = fontSize; size >= 34; size -= 2) {
@@ -356,7 +356,7 @@
         lines = twoLineLabel(ctx, name, maxWidth);
         fontSize = size;
         if (!lines.some(line => line.includes('…')) &&
-            lines.join('').replace(/\\s/g, '') === original) break;
+            lines.join('').replace(/\s/g, '') === original) break;
       }
       ctx.lineWidth = 6;
       const lineHeight = fontSize * 1.03;
