@@ -348,7 +348,7 @@
 
     if (n <= 8) {
       const fontSize = n <= 5 ? 44 : 40;
-      const maxWidth = Math.min(252, 2 * distance * Math.sin(Math.PI / n) * .85);
+      const maxWidth = n === 1 ? 252 : Math.min(252, 2 * distance * Math.sin(Math.PI / n) * .85);
       ctx.font = '900 ' + fontSize + 'px "Trebuchet MS",Arial,sans-serif';
       const lines = twoLineLabel(ctx, name, maxWidth);
       ctx.lineWidth = 6;
