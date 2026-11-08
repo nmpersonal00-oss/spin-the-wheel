@@ -192,10 +192,10 @@
       actx.rotate((i%5)*.32+(reducedMotion?0:Math.sin(t*.2+i)*.05));
       actx.globalAlpha=.48;
       actx.shadowColor='#f977c6';actx.shadowBlur=12;
+      const petal=actx.createLinearGradient(0,-r,0,0);
+      petal.addColorStop(0,'#fff1fa');petal.addColorStop(1,'#e77bbd');
       for(let j=0;j<5;j++){
         actx.save();actx.rotate(j*Math.PI*2/5);
-        const petal=actx.createLinearGradient(0,-r,0,0);
-        petal.addColorStop(0,'#fff1fa');petal.addColorStop(1,'#e77bbd');
         actx.fillStyle=petal;actx.strokeStyle='#ffdef2';actx.lineWidth=1;
         actx.beginPath();actx.ellipse(0,-r*.6,r*.42,r*.66,0,0,Math.PI*2);
         actx.fill();actx.stroke();actx.restore();
@@ -205,7 +205,10 @@
       actx.restore();
     }
   }
+  let lastPaint = -100;
   function paint(time) {
+    if (!reducedMotion && time - lastPaint < 30) { requestAnimationFrame(paint); return; }
+    lastPaint = time;
     const t = time / 1000;
     actx.clearRect(0, 0, w, h);
     cornerFlorals(t);
