@@ -185,7 +185,7 @@ function drawWheel(){const n=items.length;ctx.clearRect(0,0,900,900);if(!n){cons
 const sheen=ctx.createRadialGradient(280,245,60,CX,CY,R);sheen.addColorStop(0,'rgba(255,255,255,.25)');sheen.addColorStop(.45,'rgba(255,255,255,.07)');sheen.addColorStop(1,'rgba(43,3,54,.22)');ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fillStyle=sheen;ctx.fill();ctx.strokeStyle='#ffe9f7bb';ctx.lineWidth=7;ctx.stroke();ctx.beginPath();ctx.arc(CX,CY,R-12,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=2;ctx.stroke();
 // Draw names at large, readable sizes, oriented within the actual wheel segments.
 function wheelLabelParts(value,maxWidth){
-  const text=String(value).replace(/\\s+/g,' ').trim(),chars=Array.from(text);
+  const text=String(value).replace(/\s+/g,' ').trim(),chars=Array.from(text);
   if(ctx.measureText(text).width<=maxWidth)return [text];
   let best=null,score=Infinity;
   for(let i=1;i<chars.length;i++){
@@ -229,7 +229,7 @@ function drawWheelName(value,a,n){
       lines=wheelLabelParts(value,maxWidth);
       if(!lines.some(line=>line.includes('…')))break;
     }
-    const size=parseInt(ctx.font.match(/(\\d+)px/)[1],10);
+    const size=parseInt(ctx.font.match(/(\d+)px/)[1],10);
     const height=size*1.04;
     ctx.lineWidth=7;
     lines.forEach((line,index)=>{const y=(index-(lines.length-1)/2)*height;
