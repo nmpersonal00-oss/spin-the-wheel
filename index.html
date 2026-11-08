@@ -25,10 +25,33 @@ footer{margin-top:auto;text-align:center;color:#eab3d1;font-size:10px;letter-spa
 @media(max-width:900px){.topbar{min-height:128px}.tools{right:0;top:8px}.topbar .title{font-size:70px}.workspace{display:flex;flex-direction:column;gap:22px;padding:9px 0 30px}.wheel-section{width:100%;order:1}.wheel-wrap{width:min(90vw,600px);max-width:600px}.action-panel{order:2;gap:10px;width:min(90%,380px)}.spin-button{padding:17px;font-size:43px}.ornament{display:none}.action-help{display:none}.entry-panel{width:min(100%,580px);order:3;max-height:none;min-height:unset}.item-list{max-height:270px}.app{padding-bottom:30px}.brand-rule{margin-top:-12px}.action-status{font-size:16px}}
 @media(max-width:520px){.app{padding:5px 13px 18px}.topbar{padding-top:72px;min-height:153px}.topbar .title{font-size:clamp(51px,12vw,67px)}.eyebrow{font-size:9px}.tools{top:8px;right:0;gap:5px}.sound-control{padding:5px 8px;gap:5px}.sound-control input{width:57px}.tiny-label{display:none}.wheel-wrap{width:min(94vw,480px)}.wheel-section{margin-top:3px}.entry-panel{padding:21px 16px 17px}.workspace{gap:18px}.item-list{max-height:210px}.brand-rule{margin-top:-12px}.spin-button{font-size:41px;padding:15px}.action-count{font-size:10px}.action-status{min-height:20px}.panel-title{font-size:26px}}
 @media(prefers-reduced-motion:reduce){#garden,#aurora,.wheel-wrap::before,.winner-box{animation:none!important}*{scroll-behavior:auto!important}}
+
+/* Accessibility: legible choices on the active page, on phones and desktops. */
+.entry-name{font-size:clamp(18px,1.45vw,22px);font-weight:700;line-height:1.42;color:#fff7fd}
+.entry-row{min-height:55px;padding:9px 8px 9px 12px;gap:11px}
+.entry-mark{width:12px;height:12px;flex-basis:12px}
+.remove{width:39px;height:39px;flex:0 0 39px}
+.remove svg{width:20px;height:20px}
+.subhead{font-size:15px}
+.item-form input{font-size:17px}
+.panel-count{font-size:15px;line-height:1.4}
+.empty{font-size:17px}
+@media(max-width:900px){
+  .entry-name{font-size:21px}
+  .entry-row{min-height:57px}
+  .item-list{max-height:min(43svh,380px)}
+}
+@media(max-width:520px){
+  .entry-name{font-size:21px}
+  .entry-row{min-height:58px}
+  .item-list{max-height:330px}
+  .panel-count{font-size:15px}
+  .subhead{font-size:15px}
+}
 </style></head><body>
 <div id="garden" aria-hidden="true"></div><div id="aurora" aria-hidden="true"></div><canvas id="ambient" aria-hidden="true"></canvas><div id="veil" aria-hidden="true"></div>
 <main class="app">
- <header class="topbar"><div class="branding"><p class="eyebrow">a little moment of magic</p><h1 class="title">Spin the Wheel</h1><div class="brand-rule" aria-hidden="true"><svg viewBox="0 0 40 25"><path d="M20 22 C-7 10 8 -8 20 6 C32 -8 47 10 20 22Z"/></svg></div></div><div class="tools"><div class="sound-control"><span class="tiny-label">Volume</span><button type="button" id="soundBtn" class="icon-btn" aria-label="Mute applause"></button><input id="volume" type="range" min="0" max="100" step="1" value="22" aria-label="Applause volume"></div></div></header>
+ <header class="topbar"><div class="branding"><p class="eyebrow">a little moment of magic</p><h1 class="title">Spin the Wheel</h1><div class="brand-rule" aria-hidden="true"><svg viewBox="0 0 40 25"><path d="M20 22 C-7 10 8 -8 20 6 C32 -8 47 10 20 22Z"/></svg></div></div><div class="tools"><div class="sound-control"><span class="tiny-label">Volume</span><button type="button" id="soundBtn" class="icon-btn" aria-label="Mute sound"></button><input id="volume" type="range" min="0" max="100" step="1" value="22" aria-label="Sound effects and applause volume"></div></div></header>
  <div class="workspace">
  <section class="entry-panel panel" aria-label="Wheel choices"><svg class="panel-flower" viewBox="0 0 50 50" aria-hidden="true"><g fill="#ffa9d9"><ellipse cx="25" cy="13" rx="9" ry="13"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(72 25 25)"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(144 25 25)"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(216 25 25)"/><ellipse cx="25" cy="13" rx="9" ry="13" transform="rotate(288 25 25)"/></g><circle cx="25" cy="25" r="6" fill="#ffe8ad"/></svg><h2 class="panel-title">Add Your Items</h2><p class="subhead">Names, treats, ideas… anything you like.</p><form class="item-form" id="itemForm" autocomplete="off"><label class="sr-only" for="itemInput">Enter a name or item</label><input id="itemInput" placeholder="Type an item…" maxlength="800" enterkeyhint="done"><button class="add-btn" aria-label="Add choice" type="submit">+</button></form><div id="itemList" class="item-list" aria-live="polite"></div><div class="row-actions"><button class="subtle-btn" type="button" id="shuffle">Shuffle</button><button class="subtle-btn" type="button" id="defaults">Cute defaults</button><button class="subtle-btn" type="button" id="clear">Clear all</button></div><p class="panel-count" id="countText">7 choices on your wheel</p></section>
  <section class="wheel-section" aria-label="Spinning wheel"><div class="wheel-wrap"><div class="wheel-frame"></div><div class="wheel-rotor" id="rotor"><canvas id="wheelCanvas" width="900" height="900" role="img" aria-label="Wheel displaying your choices"></canvas></div><div id="lights" class="lights" aria-hidden="true"></div><div class="hub" aria-hidden="true"><svg viewBox="0 0 180 150" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="bowGrad" x1="0" x2=".7" y2="1"><stop stop-color="#ffe5f3"/><stop offset=".42" stop-color="#ff91c9"/><stop offset="1" stop-color="#b53686"/></linearGradient><radialGradient id="gem"><stop stop-color="#fff3fd"/><stop offset=".5" stop-color="#ff92d4"/><stop offset="1" stop-color="#b21f84"/></radialGradient></defs><path d="M75 74 Q38 51 13 41 Q5 72 29 88 Q8 97 16 119 Q49 126 83 90 Q68 114 61 145 Q81 146 97 119 Q109 143 128 148 Q131 113 111 86 Q139 116 165 108 Q175 85 149 78 Q167 61 158 39 Q124 43 105 75Z" fill="url(#bowGrad)" stroke="#ffe3f5" stroke-width="3"/><path d="M72 71 Q41 54 19 46 M108 72 Q137 52 155 45 M78 90 Q56 108 25 113 M102 92 Q123 114 155 106" fill="none" stroke="#fff2f9" stroke-opacity=".75" stroke-width="3"/><path d="M90 74 C64 51 47 84 90 107 C132 84 114 51 90 74Z" fill="url(#gem)" stroke="#ffe5fb" stroke-width="4"/><path d="M75 75 Q85 66 91 75" stroke="#fff" stroke-opacity=".8" stroke-width="3" fill="none"/></svg></div><div class="pointer" aria-hidden="true"><svg viewBox="0 0 98 118"><defs><linearGradient id="pointPink" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff5fc"/><stop offset=".45" stop-color="#ff8fce"/><stop offset="1" stop-color="#c0328a"/></linearGradient></defs><path d="M49 22 C19 -1 0 29 14 51 C24 67 42 80 49 112 C56 80 74 67 84 51 C98 29 79 -1 49 22Z" fill="url(#pointPink)" stroke="#ffe7f9" stroke-width="5"/><path d="M49 33 C32 19 16 32 24 48" stroke="#fff1fc" stroke-width="5" fill="none" stroke-linecap="round"/></svg></div></div></section>
@@ -73,9 +96,75 @@ function sparkle(x,y,s){ctx.save();ctx.translate(x,y);ctx.scale(s,s);ctx.fillSty
 function iconFor(name,index,x,y,s){const str=name.toLowerCase();ctx.save();ctx.shadowColor='#421346';ctx.shadowBlur=9;ctx.lineWidth=3;ctx.strokeStyle='#fff0f8';ctx.fillStyle='#ffb5db';if(/bow|ribbon/.test(str))bow(x,y,s);else if(/flower|blossom|sakura|rose/.test(str))blossom(x,y,s*.85);else if(/cake|cupcake|sweet/.test(str))cake(x,y,s);else if(/strawberry|berry|cherr/.test(str))strawberry(x,y,s);else if(/butterfly|flutter/.test(str))butterfly(x,y,s);else if(/moon|night/.test(str))moon(x,y,s);else if(/heart|love/.test(str))heart(x,y,s*.8);else star(x,y,s*38);ctx.restore()}
 function drawWheel(){const n=items.length;ctx.clearRect(0,0,900,900);if(!n){const g=ctx.createRadialGradient(450,400,10,450,450,450);g.addColorStop(0,'#d98fce');g.addColorStop(1,'#73356e');ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.fillStyle='#fff3fc';ctx.font='italic 34px Georgia';ctx.textAlign='center';ctx.fillText('Add your choices',450,454);return}const step=Math.PI*2/n;for(let i=0;i<n;i++){const angle=-Math.PI/2+(i-.5)*step,next=angle+step;const g=ctx.createRadialGradient(CX-90,CY-115,10,CX,CY,540);const light=i%2===0;g.addColorStop(0,light?'#ffd2e6':'#dfb4ed');g.addColorStop(.3,light?'#f69cc8':'#c58fd9');g.addColorStop(.71,light?colors[i%colors.length]:'#a565c1');g.addColorStop(1,light?'#a84283':'#6c397f');ctx.beginPath();ctx.moveTo(CX,CY);ctx.arc(CX,CY,R,angle,next);ctx.closePath();ctx.fillStyle=g;ctx.fill();ctx.strokeStyle='rgba(255,232,251,.88)';ctx.lineWidth=n>22?1.5:3;ctx.stroke();const amid=angle+step/2;ctx.save();ctx.translate(CX+Math.cos(amid)*290,CY+Math.sin(amid)*290);ctx.rotate(amid+Math.PI/2);ctx.fillStyle='rgba(255,244,251,.09)';ctx.beginPath();ctx.ellipse(0,0,90,115,.4,0,Math.PI*2);ctx.fill();ctx.restore();}
 const sheen=ctx.createRadialGradient(280,245,60,CX,CY,R);sheen.addColorStop(0,'rgba(255,255,255,.25)');sheen.addColorStop(.45,'rgba(255,255,255,.07)');sheen.addColorStop(1,'rgba(43,3,54,.22)');ctx.beginPath();ctx.arc(CX,CY,R,0,Math.PI*2);ctx.fillStyle=sheen;ctx.fill();ctx.strokeStyle='#ffe9f7bb';ctx.lineWidth=7;ctx.stroke();ctx.beginPath();ctx.arc(CX,CY,R-12,0,Math.PI*2);ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=2;ctx.stroke();
-// Decorations and labels are part of the wheel canvas, so they cannot look like screenshot patches.
-for(let i=0;i<n;i++){const a=-Math.PI/2+i*step;if(n<=13){const iconR=n<=8?238:250,iconS=n<=8?1.0:.65;iconFor(items[i],i,CX+Math.cos(a)*iconR,CY+Math.sin(a)*iconR,iconS);}
-let name=items[i];const max=n<=8?16:n<=14?12:n<=24?10:n<=42?8:6;if(name.length>max)name=name.slice(0,max-1)+'…';const rr=n<=8?340:n<=14?337:n<=26?342:350;ctx.save();ctx.translate(CX+Math.cos(a)*rr,CY+Math.sin(a)*rr);let angle=a+Math.PI/2;if(n>12){if(Math.cos(angle)<0)angle+=Math.PI;ctx.rotate(angle)}ctx.textAlign='center';ctx.textBaseline='middle';ctx.font=`${n<=8?600:500} ${n<=8?20:n<=14?18:n<=25?14:11}px 'DM Sans', sans-serif`;ctx.lineWidth=3.5;ctx.strokeStyle='rgba(57,17,69,.65)';ctx.strokeText(name,0,0,Math.max(40,n<=8?142:180));ctx.fillStyle='#fff8fc';ctx.fillText(name,0,0,Math.max(40,n<=8?142:180));ctx.restore();}
+// Draw names at large, readable sizes, oriented within the actual wheel segments.
+function wheelLabelParts(value,maxWidth){
+  const text=String(value).replace(/\\s+/g,' ').trim(),chars=Array.from(text);
+  if(ctx.measureText(text).width<=maxWidth)return [text];
+  let best=null,score=Infinity;
+  for(let i=1;i<chars.length;i++){
+    const first=chars.slice(0,i).join('').trimEnd(),second=chars.slice(i).join('').trimStart();
+    if(!first||!second||ctx.measureText(first).width>maxWidth||ctx.measureText(second).width>maxWidth)continue;
+    const wordBreak=chars[i]===' '||chars[i-1]===' ';
+    const diff=Math.abs(ctx.measureText(first).width-ctx.measureText(second).width)-(wordBreak?50:0);
+    if(diff<score){score=diff;best=[first,second];}
+  }
+  if(best)return best;
+  function fit(text){const arr=Array.from(text);while(arr.length&&ctx.measureText(arr.join('')+'…').width>maxWidth)arr.pop();return arr.join('').trimEnd()+'…';}
+  let split=0;
+  while(split<chars.length&&ctx.measureText(chars.slice(0,split+1).join('')).width<=maxWidth)split++;
+  return [chars.slice(0,split).join('').trimEnd(),fit(chars.slice(split).join('').trimStart())];
+}
+function wheelSingleLine(value,maxWidth){
+  const text=String(value).trim();
+  if(ctx.measureText(text).width<=maxWidth)return text;
+  const letters=Array.from(text);
+  while(letters.length&&ctx.measureText(letters.join('')+'…').width>maxWidth)letters.pop();
+  return letters.join('').trimEnd()+'…';
+}
+function drawWheelName(value,a,n){
+  const r=n<=10?340:n<=25?314:302;
+  ctx.save();
+  ctx.translate(CX+Math.cos(a)*r,CY+Math.sin(a)*r);
+  const wrap=n<=10;
+  let orientation=wrap?a+Math.PI/2:a;
+  if(Math.cos(orientation)<0)orientation+=Math.PI;
+  ctx.rotate(orientation);
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillStyle='#fffafe';ctx.strokeStyle='#4b175d';ctx.lineJoin='round';
+  ctx.shadowColor='#2b0d3b';ctx.shadowBlur=5;
+  const font='900 ';
+  if(wrap){
+    const base=n<=5?76:n<=8?70:60,min=n<=8?52:46;
+    const maxWidth=n===1?300:Math.min(298,2*r*Math.sin(Math.PI/n)*.84);
+    let lines=[];
+    for(let size=base;size>=min;size-=2){
+      ctx.font=font+size+"px 'DM Sans','Trebuchet MS',sans-serif";
+      lines=wheelLabelParts(value,maxWidth);
+      if(!lines.some(line=>line.includes('…')))break;
+    }
+    const size=parseInt(ctx.font.match(/(\\d+)px/)[1],10);
+    const height=size*1.04;
+    ctx.lineWidth=7;
+    lines.forEach((line,index)=>{const y=(index-(lines.length-1)/2)*height;
+      ctx.strokeText(line,0,y);ctx.fillText(line,0,y);});
+  }else{
+    const size=n<=18?53:n<=30?44:n<=48?35:25;
+    ctx.font=font+size+"px 'DM Sans','Trebuchet MS',sans-serif";
+    ctx.lineWidth=n>48?3.3:5;
+    const line=wheelSingleLine(value,Math.min(252,n<=18?260:226));
+    ctx.strokeText(line,0,0);ctx.fillText(line,0,0);
+  }
+  ctx.restore();
+}
+// Names are rendered directly into the wheel canvas (never a screenshot or a stretched label).
+for(let i=0;i<n;i++){
+  const a=-Math.PI/2+i*step;
+  if(n<=13){
+    const iconR=n<=8?199:210,iconS=n<=8?.8:.57;
+    iconFor(items[i],i,CX+Math.cos(a)*iconR,CY+Math.sin(a)*iconR,iconS);
+  }
+  drawWheelName(items[i],a,n);
+}
 }
 function lights(){const e=$('lights');e.replaceChildren();for(let i=0;i<44;i++){const b=document.createElement('span');b.className='bulb';const angle=i/44*Math.PI*2;b.style.left=(50+47.2*Math.sin(angle))+'%';b.style.top=(50-47.2*Math.cos(angle))+'%';b.style.opacity=String(.53+(i%5)*.1);e.append(b)}}
 function update(){save();drawWheel();renderList();}
